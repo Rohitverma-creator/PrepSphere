@@ -3,6 +3,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
 import axios from "axios";
+import { serverUrl } from "../App";
 
 const plans = [
   {
@@ -61,9 +62,9 @@ function Pricing() {
     try {
       setLoadingPlan(plan.id);
 
-      //  Create Order
+      // Create Order
       const { data } = await axios.post(
-        "http://localhost:8000/api/payment/order",
+        `${serverUrl}/api/payment/order`,
         {
           amount: Number(plan.price.replace("₹", "")),
           credits: plan.credits,
@@ -73,7 +74,6 @@ function Pricing() {
 
       const order = data.order;
 
-      // Razorpay Checkout Options
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: order.amount,
@@ -85,7 +85,7 @@ function Pricing() {
         handler: async function (response) {
           try {
             const verifyRes = await axios.post(
-              "http://localhost:8000/api/payment/verify",
+              `${serverUrl}/api/payment/verify`,
               response,
               { withCredentials: true }
             );
@@ -94,7 +94,6 @@ function Pricing() {
               alert("Payment Successful 🎉");
               window.location.reload();
             }
-            
           } catch (error) {
             console.log(error);
           }
@@ -161,31 +160,26 @@ function Pricing() {
             }`}
           >
 
-            {/* Popular Badge */}
             {plan.popular && (
               <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-pink-500 text-white text-xs px-4 py-1 rounded-full shadow">
                 Most Popular
               </span>
             )}
 
-            {/* Plan Name */}
             <h2 className="text-xl font-bold text-gray-800 text-center">
               {plan.name}
             </h2>
 
-            {/* Price */}
             <p className="text-4xl font-bold text-pink-600 text-center mt-3">
               {plan.price}
             </p>
 
-            {/* Description */}
             <p className="text-gray-500 text-sm text-center mt-3">
               {plan.description}
             </p>
 
             <div className="w-full h-px bg-gray-200 my-6"></div>
 
-            {/* Features */}
             <ul className="space-y-3">
               {plan.features.map((feature, i) => (
                 <li
@@ -198,7 +192,6 @@ function Pricing() {
               ))}
             </ul>
 
-            {/* Payment Button */}
             <motion.button
               whileTap={{ scale: 0.9 }}
               whileHover={{ scale: 1.05 }}
@@ -208,6 +201,7 @@ function Pricing() {
             >
               {loadingPlan === plan.id ? "Processing..." : "Buy Now"}
             </motion.button>
+
           </motion.div>
         ))}
       </div>
