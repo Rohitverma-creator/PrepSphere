@@ -11,7 +11,7 @@ import InterviewHistory from "./pages/InterviewHistory";
 import Pricing from "./pages/Pricing";
 import InterviewReport from "./pages/InterviewReport";
 import FinishInterview from "./pages/FinishInterview";
-export const serverUrl = "http://localhost:8000";
+export const serverUrl = "https://prepsphere-1.onrender.com";
 
 const App = () => {
   const dispatch = useDispatch();
